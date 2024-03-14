@@ -26,8 +26,7 @@ puts "Seeding Employees"
   lastname = Faker::Name.last_name
   business_name = Faker::Company.name
   email = Faker::Internet.email
-  role = Faker::Job.title
-  office_phone = Faker::PhoneNumber.phone_number
+  role = %w[manager admin member].sample  
   phone_number = Faker::PhoneNumber.cell_phone
   password = "james"
 
@@ -37,7 +36,6 @@ puts "Seeding Employees"
     business_name: business_name,
     email: email,
     role: role,
-    office_phone: office_phone,
     phone_number: phone_number,
     password: password,
     password_confirmation: password

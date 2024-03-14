@@ -3,5 +3,5 @@ class Employee < ApplicationRecord
 
     # has_many :transactions
 
-    # validates :email,presence: true, uniqueness: true
+    validates :email,presence: true, uniqueness: true
 end

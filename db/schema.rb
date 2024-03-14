@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_09_094932) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_14_221458) do
   create_table "categories", force: :cascade do |t|
     t.string "category_name"
     t.datetime "created_at", null: false
@@ -32,7 +32,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_094932) do
     t.string "business_name"
     t.string "role"
     t.string "email"
-    t.string "office_phone"
     t.string "phone_number"
     t.string "password_digest"
     t.datetime "created_at", null: false
@@ -50,10 +49,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_094932) do
     t.index ["supplier_id"], name: "index_inventories_on_supplier_id"
   end
 
+  create_table "product_variants", force: :cascade do |t|
+    t.string "color"
+    t.string "size"
+    t.string "description"
+    t.decimal "price"
+    t.integer "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_variants_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.string "product_name"
     t.string "description"
-    t.string "price"
     t.integer "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -93,6 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_094932) do
 
   add_foreign_key "inventories", "products"
   add_foreign_key "inventories", "suppliers"
+  add_foreign_key "product_variants", "products"
   add_foreign_key "products", "categories"
   add_foreign_key "transaction_details", "inventories"
   add_foreign_key "transaction_details", "transaction_records"

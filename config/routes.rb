@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
+  resources :product_variants
   resources :transaction_records
   resources :categories
   resources :customers
-  post '/login', to: 'auth#create'
-  resources :employees, only: [:create, :show, :update, :delete]
+  post "/login", to: "auth#create"
+  resources :employees, only: [:index, :show, :update, :delete]
   resources :transaction_details
   resources :products
   resources :suppliers
