@@ -1,6 +1,7 @@
 class SuppliersController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   before_action :set_supplier, only: %i[ show update destroy ]
-  skip_before_action :authorized, only: [:index, :create, :show,:destroy,:update]
+  skip_before_action :authorized, only: [:index, :create, :show, :destroy, :update]
 
   # GET /suppliers
   def index
@@ -11,7 +12,9 @@ class SuppliersController < ApplicationController
 
   # GET /suppliers/1
   def show
-    render json: @supplier
+    supplier = Supplier.find(params[:id])
+    render json: supplier
+  rescue ActiveRecord::RecordNotFound
   end
 
   # POST /suppliers
@@ -49,5 +52,8 @@ class SuppliersController < ApplicationController
   # Only allow a list of trusted parameters through.
   def supplier_params
     params.require(:supplier).permit(:company_name, :firstname, :lastname, :phone_number, :email)
+  end
+  def render_not_found_response
+    render json: { error: "record not found" }, status: 404
   end
 end

@@ -1,81 +1,97 @@
-# Clear existing data
-puts "Clearing seed Data"
-Customer.destroy_all
 Employee.destroy_all
-Supplier.destroy_all
+#   Inventory.destroy_all
+#   ProductVariant.destroy_all
+#   Product.destroy_all
+#   Category.destroy_all
+#   Customer.destroy_all
+ProductType.destroy_all
 
-puts "Seeding Customers"
-5.times do
-  username = Faker::Internet.username(specifier: 5..8)
-  credit_limit = Faker::Number.between(from: 100, to: 100000)
-  phone_number = Faker::PhoneNumber.phone_number
-  email = Faker::Internet.email
+#   # Clear existing data
+# Brand.destroy_all
 
-  Customer.create!(
-    username: username,
-    credit_limit: credit_limit,
-    phone_number: phone_number,
-    email: email
-  )
-end
+# db/seeds.rb
 
-# Seed Employees
-puts "Seeding Employees"
-5.times do
-  firstname = Faker::Name.first_name
-  lastname = Faker::Name.last_name
-  business_name = Faker::Company.name
-  email = Faker::Internet.email
-  role = %w[manager admin member].sample  
-  phone_number = Faker::PhoneNumber.cell_phone
-  password = "james"
-
-  Employee.create!(
-    firstname: firstname,
-    lastname: lastname,
-    business_name: business_name,
-    email: email,
-    role: role,
-    phone_number: phone_number,
-    password: password,
-    password_confirmation: password
-  )
-end
-
-# Seed Suppliers
-puts "Seeding Suppliers"
-5.times do
-  company_name = Faker::Company.name
-  firstname = Faker::Name.first_name
-  lastname = Faker::Name.last_name
-  phone_number = Faker::PhoneNumber.phone_number
-  email = Faker::Internet.email
-
-  Supplier.create!(
-    company_name: company_name,
-    firstname: firstname,
-    lastname: lastname,
-    phone_number: phone_number,
-    email: email
-  )
-end
-
-category_names = [
-  'Engine',
-  'Transmission',
-  'Brakes',
-  'Suspension',
-  'Electrical',
-  'Cooling',
-  'Exhaust',
-  'Body',
-  'Interior',
-  'Miscellaneous'
+# Define the product types
+product_types = [
+  "Apparel and Accessories",
+  "Art and Crafts",
+  "Automotive",
+  "Books and Stationery",
+  "Education and Learning",
+  "Electrical and Plumbing",
+  "Electronics",
+  "Entertainment",
+  "Food and Beverages",
+  "Gifts and Novelties",
+  "Health and Beauty",
+  "Home and Garden",
+  "Jewelry and Watches",
+  "Medical and Pharmaceutical",
+  "Office Equipment and Supplies",
+  "Pets and Pet Supplies",
+  "Services",
+  "Sports and Fitness",
+  "Toys and Games",
+  "Travel and Tourism",
 ]
 
-# Create categories
-category_names.each do |category_name|
-  Category.create(category_name: category_name)
+# Create ProductType records
+product_types.each do |type_name|
+  ProductType.create(name: type_name)
+end
+
+puts "Product types seeded successfully!"
+
+# data = JSON.parse(File.read('./db.json'))
+
+# # Create Suppliers and Inventory
+# data['products'].each do |product|
+
+#   # Supplier.create!(company_name: product['carmake'])
+#   supplier = Supplier.find_or_create_by(company_name: product['carMake']) do |s|
+#     s.firstname = Faker::Name.first_name
+#     s.lastname = Faker::Name.last_name
+#     s.phone_number = Faker::PhoneNumber.cell_phone
+#     s.email = Faker::Internet.email
+#   end
+# end
+
+users_data = [
+  {
+    firstname: Faker::Name.first_name,
+    lastname: Faker::Name.last_name,
+    business_name: "Admin Corp",
+    email: Faker::Internet.email,
+    role: "admin",
+    phone_number: "1234567890",
+    password: "james",
+    password_confirmation: "james",
+  },
+  {
+    firstname: Faker::Name.first_name,
+    lastname: Faker::Name.last_name,
+    business_name: "Default Co.",
+    email: "default@example.com",
+    role: "default",
+    phone_number: "0987654321",
+    password: "james",
+    password_confirmation: "james",
+  },
+  {
+    firstname: Faker::Name.first_name,
+    lastname: Faker::Name.last_name,
+    business_name: "Manager Ltd.",
+    email: "manager@example.com",
+    role: "manager",
+    phone_number: "9876543210",
+    password: "james",
+    password_confirmation: "james",
+  },
+]
+
+# # Create users using the data
+users_data.each do |user_data|
+  Employee.create!(user_data)
 end
 
 puts "Done Seeding"

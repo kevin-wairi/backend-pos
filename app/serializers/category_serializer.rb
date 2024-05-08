@@ -1,3 +1,4 @@
 class CategorySerializer < ActiveModel::Serializer
-  attributes :id, :category_name
+  attributes :id, :name, :description
+  belongs_to :product_type
 end

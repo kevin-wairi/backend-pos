@@ -1,5 +1,7 @@
 class Inventory < ApplicationRecord
-  belongs_to :product
+  has_paper_trail
+
   belongs_to :supplier
-  has_many :transaction_details
+  belongs_to :product
+  # has_many :transaction_details
 end

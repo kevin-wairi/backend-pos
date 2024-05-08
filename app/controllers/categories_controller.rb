@@ -1,6 +1,5 @@
 class CategoriesController < ApplicationController
-  before_action :set_category, only: %i[ show update destroy ]
-  skip_before_action :authorized, only: [:index, :create, :show, :update, :destroy]
+    skip_before_action :authorized, only: [:index, :create, :show, :update]
 
   # GET /categories
   def index
@@ -15,12 +14,11 @@ class CategoriesController < ApplicationController
 
   # POST /categories
   def create
-    @category = Category.new(category_params)
-
-    if @category.save
-      render json: @category, status: :created, location: @category
+    category = Category.new(category_params)
+    if category.save
+      render json: category, status: :created
     else
-      render json: @category.errors, status: :unprocessable_entity
+      render json: category.errors, status: :unprocessable_entity
     end
   end
 
@@ -47,6 +45,6 @@ class CategoriesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def category_params
-    params.require(:category).permit(:category_name)
+    params.require(:category).permit(:name, :description, :product_type_id)
   end
 end
