@@ -1,5 +1,4 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: %i[ show update destroy ]
   skip_before_action :authorized, only: [:index, :create, :show, :update,:destroy]
 
   # GET /customers

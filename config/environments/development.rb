@@ -6,7 +6,7 @@ Rails.application.configure do
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
-  config.enable_reloading = true
+  config.cache_classes = false
 
   # Do not eager load code on boot.
   config.eager_load = false
@@ -34,7 +34,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
 
@@ -53,9 +53,6 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
-  # Highlight code that enqueued background job in logs.
-  config.active_job.verbose_enqueue_logs = true
-
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
@@ -65,9 +62,23 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+    #added settings
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+  
+    config.action_mailer.delivery_method = :smtp
+    # host = 'localhost:3000'
+    config.asset_host = "http://localhost:3000"
+    config.action_mailer.asset_host = config.action_controller.asset_host
+    Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
-  # Raise error when a before_action's only/except options reference missing actions
-  config.action_controller.raise_on_missing_callback_actions = true
-
-  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+    # SMTP settings for gmail
+    config.action_mailer.smtp_settings = {
+      :address              => "smtp.gmail.com",
+      :port                 => 587,
+      :user_name            => "kevinwairi",
+      :password             => "kiej vsbk stib lrha",
+      :authentication       => "plain",
+      :enable_starttls_auto => true
+    }
 end

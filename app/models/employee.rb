@@ -1,7 +1,7 @@
 class Employee < ApplicationRecord
-    has_secure_password
-    
-    has_many :transaction_records
+  has_secure_password
 
-    validates :email,presence: true, uniqueness: true
+  # validates :email, presence: true, uniqueness: true
+  # validates :password, presence: true
+  # validates :password_confirmation, presence: true
 end

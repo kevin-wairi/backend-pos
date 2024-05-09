@@ -1,7 +1,6 @@
 class EmployeesController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_unporcessable_entity
-  rescue_from ActiveRecord::RecordNotFound, with: :render_record_not_found
-  skip_before_action :authorized, only: [:index, :create, :show, :update,:destroy]
+  skip_before_action :authorized, only: [:index, :create, :show, :update, :destroy]
 
   # GET /employees
   def index
@@ -17,11 +16,16 @@ class EmployeesController < ApplicationController
 
   # POST /employees
   def create
-    password = params[:employee][:firstname]
-    password_confirmation =  params[:employee][:firstname]
-    employee = Employee.create!(employee_params)
+    default_password = params[:lastname]
+    employee_params_with_default_password = employee_params.merge(password: default_password, password_confirmation: default_password)
+
+    employee = Employee.create!(employee_params_with_default_password)
+    if employee.persisted?
+      puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+      UserMailer.with(user: employee).welcome_email(employee).deliver_now
+    end
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     render json: employee, status: :created
-    rescue ActiveRecord::RecordInvalid
   end
 
   # PATCH/PUT /employees/1
@@ -39,20 +43,19 @@ class EmployeesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_employee
-      @employee = Employee.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def employee_params
-      params.require(:employee).permit(:firstname, :lastname,:email, :role, :phone_number,:business_name )
-    end
+  def render_unporcessable_entity(exception)
+    errors = exception.record.errors.full_messages
+    render json: { errors: errors }, status: :unprocessable_entity
+  end
 
-    def render_unporcessable_entity
-      render json: { error: "unprocessable entity" }, status: 404
-    end
-    def render_record_not_found
-      render json: { error: "record not found" }, status: 404
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_employee
+    @employee = Employee.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def employee_params
+    params.permit(:firstname, :lastname, :email, :role, :phone_number, :business_name, :password, :password_confirmation)
+  end
 end
